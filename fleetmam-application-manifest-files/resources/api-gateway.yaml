@@ -1,0 +1,78 @@
+# Deployment API Gateway
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: api-gateway
+  name: api-gateway
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: api-gateway
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: api-gateway
+    spec:
+      containers:
+      - image: subrahmanyamr/fleetman-api-gateway:latest
+        name: api-gateway
+        env:
+        - name: SPRING_PROFILES_ACTIVE
+          valueFrom:
+            configMapKeyRef:
+              name: production-configuration
+              key: spring-profiles-active
+        envFrom:
+        - configMapRef:
+            name: tracing-options
+        resources:
+          requests:
+            cpu: 100m
+            memory: 210Mi
+          limits:
+            cpu: 150m
+            memory: 250Mi
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 8080
+          initialDelaySeconds: 150
+          periodSeconds: 10
+          successThreshold: 2
+          failureThreshold: 3
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 8080
+          initialDelaySeconds: 150
+          periodSeconds: 10
+          successThreshold: 1         # Must be 1 for liveness and startup Probes. 
+          failureThreshold: 3
+status: {}
+
+# Service API Gateway
+---  
+apiVersion: v1
+kind: Service
+metadata:
+  creationTimestamp: null
+  labels:
+    app: api-gateway
+  name: fleetman-api-gateway
+spec:
+  ports:
+  - name: "endpoint"
+    port: 8080
+    protocol: TCP
+    targetPort: 8080
+  selector:
+    app: api-gateway
+  type: ClusterIP
+status:
+  loadBalancer: {}

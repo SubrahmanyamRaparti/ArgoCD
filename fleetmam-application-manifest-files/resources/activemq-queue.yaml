@@ -1,0 +1,77 @@
+# Deployment Queue
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: queue
+  name: queue
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: queue
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: queue
+    spec:
+      containers:
+      - image: subrahmanyamr/fleetman-queue:latest
+        name: queue
+        resources:
+          requests:
+            cpu: 100m
+            memory: 250Mi
+          limits:
+            cpu: 150m
+            memory: 300Mi
+status: {}
+
+# Service Queue
+---  
+apiVersion: v1
+kind: Service
+metadata:
+  creationTimestamp: null
+  labels:
+    app: queue
+  name: fleetman-queue
+spec:
+  ports:
+  - name: "endpoint"
+    port: 61616
+    protocol: TCP
+    targetPort: 61616
+  selector:
+    app: queue
+  type: ClusterIP
+status:
+  loadBalancer: {}
+
+# Service NLB Queue
+---  
+apiVersion: v1
+kind: Service
+metadata:
+  creationTimestamp: null
+  labels:
+    app: queue-nlb
+  name: queue-nlb
+  annotations:
+    service.beta.kubernetes.io/aws-load-balancer-type: nlb
+    service.beta.kubernetes.io/aws-load-balancer-cross-load-balancing-enabled: 'true'
+spec:
+  ports:
+  - name: "http"
+    port: 80
+    protocol: TCP
+    targetPort: 8161
+  selector:
+    app: queue
+  type: LoadBalancer
+status:
+  loadBalancer: {}

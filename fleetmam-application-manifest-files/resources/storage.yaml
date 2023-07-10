@@ -1,0 +1,27 @@
+# AWS Storage Class
+---
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: aws-storage-class
+#   annotations:
+#     storageclass.kubernetes.io/is-default-class: "true"
+provisioner: kubernetes.io/aws-ebs
+parameters:
+  type: gp2
+  fsType: ext4
+  
+# Persistent Volume Claim for Mongo DB
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mongo-db-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  volumeMode: Filesystem
+  resources:
+    requests:
+      storage: 11Gi
+  storageClassName: aws-storage-class

@@ -1,0 +1,62 @@
+# Deployment Position Tracker
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: position-tracker
+  name: position-tracker
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: position-tracker
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: position-tracker
+    spec:
+      containers:
+      - image: subrahmanyamr/fleetman-position-tracker:latest
+        name: position-tracker
+        env:
+        - name: SPRING_PROFILES_ACTIVE
+          valueFrom:
+            configMapKeyRef:
+              name: production-configuration
+              key: spring-profiles-active
+        envFrom:
+        - configMapRef:
+            name: tracing-options
+        resources:
+          requests:
+            cpu: 100m
+            memory: 230Mi
+          limits:
+            cpu: 150m
+            memory: 260Mi
+status: {}
+
+# Service Position Tracker
+---  
+apiVersion: v1
+kind: Service
+metadata:
+  creationTimestamp: null
+  labels:
+    app: position-tracker
+  name: fleetman-position-tracker
+spec:
+  ports:
+  - name: "endpoint"
+    port: 8080
+    protocol: TCP
+    targetPort: 8080
+  selector:
+    app: position-tracker
+  type: ClusterIP
+status:
+  loadBalancer: {}

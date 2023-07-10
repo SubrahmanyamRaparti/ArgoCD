@@ -1,0 +1,63 @@
+# Deployment Mongo DB
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: mongodb
+  name: mongodb
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mongodb
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: mongodb
+    spec:
+      containers:
+      - image: mongo:3.6.5-jessie
+        name: mongodb
+        volumeMounts:
+        - name: mongo-persistent-storage
+          mountPath: /data/db
+        resources:
+          requests:
+            cpu: 100m
+            memory: 200Mi
+          limits:
+            cpu: 150m
+            memory: 230Mi
+      volumes:
+      - name: mongo-persistent-storage
+        # persistentVolumeClaim:
+        #   claimName: mongo-db-pvc
+        hostPath:
+          path: /data
+          type: DirectoryOrCreate
+status: {}
+
+# Service mongo DB
+---
+apiVersion: v1
+kind: Service
+metadata:
+  creationTimestamp: null
+  labels:
+    app: mongodb
+  name: fleetman-mongodb
+spec:
+  ports:
+  - name: "endpoint"
+    port: 27017
+    protocol: TCP
+    targetPort: 27017
+  selector:
+    app: mongodb
+  type: ClusterIP
+status:
+  loadBalancer: {}

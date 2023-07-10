@@ -1,0 +1,41 @@
+# Deployment Position Simulator
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: position-simulator
+  name: position-simulator
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: position-simulator
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: position-simulator
+    spec:
+      containers:
+      - image: subrahmanyamr/fleetman-position-simulator:latest
+        name: position-simulator
+        env:
+        - name: SPRING_PROFILES_ACTIVE
+          valueFrom:
+            configMapKeyRef:
+              name: production-configuration
+              key: spring-profiles-active
+        envFrom:
+        - configMapRef:
+            name: tracing-options
+        resources:
+          requests:
+            cpu: 100m
+            memory: 190Mi
+          limits:
+            cpu: 150m
+            memory: 210Mi
+status: {}

@@ -1,0 +1,53 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+- activemq-queue.yaml
+- api-gateway.yaml
+- mongo-database.yaml
+- position-simulator.yaml
+- position-tracker.yaml
+- storage.yaml
+- webapp-frontend.yaml
+# - config-maps.yaml        # Replacing ConfigMap with Kustomize configMapGenerator
+
+namespace: fleetman-test
+
+namePrefix: FL-
+nameSuffix: -integration
+
+commonAnnotations:
+  oncallPager: +91-814-739-6440
+
+commonLabels:
+  application: fleetman
+  owner: subbu
+
+configMapGenerator:
+- name: production-configuration
+  behavior: create
+  files:
+  - application.properties
+- name: tracing-options
+  behavior: create
+  envs:
+  - debug.environment
+
+images:
+- name: subrahmanyamr/fleetman-webapp
+  newName: subrahmanyamr/fleetman-webap
+  newTag: latest
+- name: subrahmanyamr/fleetman-api-gateway
+  newName: subrahmanyamr/fleetman-api-gateway
+  newTag: latest
+- name: subrahmanyamr/fleetman-position-simulator
+  newName: subrahmanyamr/fleetman-position-simulator
+  newTag: latest
+- name: subrahmanyamr/fleetman-position-tracker
+  newName: subrahmanyamr/fleetman-position-tracker
+  newTag: latest
+- name: subrahmanyamr/fleetman-queue
+  newName: subrahmanyamr/fleetman-queue
+  newTag: latest
+- name: mongo
+  newName: mongo
+  newTag: 3.6.5-jessie

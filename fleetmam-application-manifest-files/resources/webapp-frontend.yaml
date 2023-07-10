@@ -1,0 +1,81 @@
+# Deployment Webapp
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: webapp
+  name: webapp
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: webapp
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: webapp
+    spec:
+      containers:
+      - image: subrahmanyamr/fleetman-webapp:latest
+        name: webapp
+        env:
+        - name: SPRING_PROFILES_ACTIVE
+          valueFrom:
+            configMapKeyRef:
+              name: production-configuration
+              key: spring-profiles-active
+        envFrom:
+        - configMapRef:
+            name: tracing-options
+        resources:
+          requests:
+            cpu: 25m
+            memory: 100Mi
+          limits:
+            cpu: 30m
+            memory: 150Mi
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 80
+          initialDelaySeconds: 30
+          periodSeconds: 15
+          successThreshold: 2
+          failureThreshold: 3
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 80
+          initialDelaySeconds: 30
+          periodSeconds: 15
+          successThreshold: 1         # Must be 1 for liveness and startup Probes. 
+          failureThreshold: 3
+status: {}
+
+# Service NLB Webapp
+---  
+apiVersion: v1
+kind: Service
+metadata:
+  creationTimestamp: null
+  labels:
+    app: webapp
+  name: fleetman-webapp
+  annotations:
+    service.beta.kubernetes.io/aws-load-balancer-type: nlb
+    service.beta.kubernetes.io/aws-load-balancer-cross-load-balancing-enabled: 'true'
+spec:
+  ports:
+  - name: "http"
+    port: 80
+    protocol: TCP
+    targetPort: 80
+  selector:
+    app: webapp
+  type: NodePort
+status:
+  loadBalancer: {}
