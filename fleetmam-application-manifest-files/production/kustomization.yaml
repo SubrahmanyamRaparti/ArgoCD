@@ -5,22 +5,22 @@ resources:
 
 namespace: fleetman-production
 
-namePrefix: FL-
+# namePrefix: FL-
 nameSuffix: -production
 
 commonLabels:
   application: fleetman-production
   owner: subrahmanyam r
 
-configMapGenerator:
-- name: production-configuration
-  behavior: create
-  files:
-  - application.properties
-- name: tracing-options
-  behavior: create
-  envs:
-  - debug.environment
+# configMapGenerator:
+# - name: production-configuration
+#   behavior: create
+#   files:
+#   - application.properties
+# - name: tracing-options
+#   behavior: create
+#   envs:
+#   - debug.environment
 
 images:
 - name: subrahmanyamr/fleetman-webapp
