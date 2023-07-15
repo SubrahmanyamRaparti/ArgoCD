@@ -46,6 +46,10 @@ spec:
     port: 61616
     protocol: TCP
     targetPort: 61616
+  - name: "webapp"
+    port: 80
+    protocol: TCP
+    targetPort: 8161
   selector:
     app: queue
   type: ClusterIP
@@ -53,25 +57,25 @@ status:
   loadBalancer: {}
 
 # Service NLB Queue
----  
-apiVersion: v1
-kind: Service
-metadata:
-  creationTimestamp: null
-  labels:
-    app: queue-nlb
-  name: queue-nlb
-  annotations:
-    service.beta.kubernetes.io/aws-load-balancer-type: nlb
-    service.beta.kubernetes.io/aws-load-balancer-cross-load-balancing-enabled: 'true'
-spec:
-  ports:
-  - name: "http"
-    port: 80
-    protocol: TCP
-    targetPort: 8161
-  selector:
-    app: queue
-  type: LoadBalancer
-status:
-  loadBalancer: {}
+# ---  
+# apiVersion: v1
+# kind: Service
+# metadata:
+#   creationTimestamp: null
+#   labels:
+#     app: queue-nlb
+#   name: queue-nlb
+#   annotations:
+#     service.beta.kubernetes.io/aws-load-balancer-type: nlb
+#     service.beta.kubernetes.io/aws-load-balancer-cross-load-balancing-enabled: 'true'
+# spec:
+#   ports:
+#   - name: "http"
+#     port: 80
+#     protocol: TCP
+#     targetPort: 8161
+#   selector:
+#     app: queue
+#   type: LoadBalancer
+# status:
+#   loadBalancer: {}
