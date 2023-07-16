@@ -23,7 +23,7 @@ spec:
       - image: mongo:3.6.5-jessie
         name: mongodb
         volumeMounts:
-        - name: mongo-persistent-storage
+        - name: mongo-data-storage
           mountPath: /data/db
         resources:
           requests:
@@ -33,12 +33,9 @@ spec:
             cpu: 150m
             memory: 230Mi
       volumes:
-      - name: mongo-persistent-storage
-        # persistentVolumeClaim:
-        #   claimName: mongo-db-pvc
-        hostPath:
-          path: /data
-          type: DirectoryOrCreate
+      - name: mongo-data-storage
+        persistentVolumeClaim:
+          claimName: mongo-persistent-volume-claim
 status: {}
 
 # Service mongo DB

@@ -6,8 +6,8 @@ resources:
 - mongo-database.yaml
 - position-simulator.yaml
 - position-tracker.yaml
-- storage.yaml
 - webapp-frontend.yaml
+# - storage.yaml            # Moved to production and aws-prduction folders to configure storage as per the requirement
 # - config-maps.yaml        # Replacing ConfigMap with Kustomize configMapGenerator
 
 namespace: default

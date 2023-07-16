@@ -1,0 +1,39 @@
+# Persistent Volume for Mongo DB
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: mongo-persistent-volume
+spec:
+  accessModes:
+    - ReadWriteOnce
+  volumeMode: Filesystem
+  capacity:
+    storage: 5Gi
+  persistentVolumeReclaimPolicy: Retain   # Because we dont want to loose our data and might want to back it up.
+  storageClassName: local
+  local:
+    path: /mnt
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+      - matchExpressions:
+        - key: kubernetes.io/hostname
+          operator: In
+          values:
+          - node01
+
+# Persistent Volume Claim for Mongo DB
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mongo-persistent-volume-claim
+spec:
+  accessModes:
+    - ReadWriteOnce
+  volumeMode: Filesystem
+  resources:
+    requests:
+      storage: 5Gi
+  storageClassName: local
