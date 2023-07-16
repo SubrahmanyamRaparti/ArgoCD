@@ -34,7 +34,7 @@ configMapGenerator:
 
 images:
 - name: subrahmanyamr/fleetman-webapp
-  newName: subrahmanyamr/fleetman-webap
+  newName: subrahmanyamr/fleetman-webapp
   newTag: latest
 - name: subrahmanyamr/fleetman-api-gateway
   newName: subrahmanyamr/fleetman-api-gateway

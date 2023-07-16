@@ -24,7 +24,7 @@ commonLabels:
 
 images:
 - name: subrahmanyamr/fleetman-webapp
-  newName: subrahmanyamr/fleetman-webap
+  newName: subrahmanyamr/fleetman-webapp
   newTag: 1.0.0
 - name: subrahmanyamr/fleetman-api-gateway
   newName: subrahmanyamr/fleetman-api-gateway
