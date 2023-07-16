@@ -3,14 +3,14 @@ kind: Kustomization
 resources:
 - ../resources/
 
-namespace: fleetman-production
+namespace: default
 
-# namePrefix: FL-
-nameSuffix: -production
+# namePrefix: fa-
+# nameSuffix: -production
 
 commonLabels:
   application: fleetman-production
-  owner: subrahmanyam r
+  owner: subrahmanyam-r
 
 # configMapGenerator:
 # - name: production-configuration

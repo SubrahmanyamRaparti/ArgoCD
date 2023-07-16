@@ -10,10 +10,10 @@ resources:
 - webapp-frontend.yaml
 # - config-maps.yaml        # Replacing ConfigMap with Kustomize configMapGenerator
 
-namespace: fleetman-test
+namespace: default
 
-namePrefix: FL-
-nameSuffix: -integration
+# namePrefix: fa-
+# nameSuffix: -integration
 
 commonAnnotations:
   oncallPager: +91-814-739-6440
