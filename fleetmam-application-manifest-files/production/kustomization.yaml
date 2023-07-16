@@ -12,15 +12,15 @@ commonLabels:
   application: fleetman-production
   owner: subrahmanyam-r
 
-# configMapGenerator:
-# - name: production-configuration
-#   behavior: create
-#   files:
-#   - application.properties
-# - name: tracing-options
-#   behavior: create
-#   envs:
-#   - debug.environment
+configMapGenerator:
+- name: production-configuration
+  behavior: create
+  envs:
+  - application.properties
+- name: tracing-options
+  behavior: create
+  files:
+  - debug.environment
 
 images:
 - name: subrahmanyamr/fleetman-webapp

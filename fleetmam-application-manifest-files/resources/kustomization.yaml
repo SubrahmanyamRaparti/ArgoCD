@@ -22,16 +22,6 @@ commonLabels:
   application: fleetman
   owner: subbu
 
-configMapGenerator:
-- name: production-configuration
-  behavior: create
-  files:
-  - application.properties
-- name: tracing-options
-  behavior: create
-  envs:
-  - debug.environment
-
 images:
 - name: subrahmanyamr/fleetman-webapp
   newName: subrahmanyamr/fleetman-webapp
