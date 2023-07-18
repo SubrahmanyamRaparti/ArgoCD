@@ -1,0 +1,10 @@
+# Service NLB Webapp
+---  
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: webapp
+  name: fleetman-webapp
+spec:
+  type: NodePort

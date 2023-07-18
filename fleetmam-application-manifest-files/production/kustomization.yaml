@@ -4,6 +4,8 @@ resources:
 - ../resources/
 - storage.yaml
 
+patches:
+  - service-patch.yaml
 namespace: default
 
 # namePrefix: fa-
